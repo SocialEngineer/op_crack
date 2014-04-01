@@ -1,0 +1,3131 @@
+//  ое-где есть баги, осторожно :)
+
+1.1
+
+#include <iostream>
+#include <stdlib.h>
+#include <iomanip>
+
+using namespace std;
+
+int main()
+{
+    int hms[6];
+    char ch;
+    cout << "Enter first moment(hours:minutes:seconds):" << endl;
+
+    cin >> hms[0] >> ch >> hms[1] >> ch >> hms[2];
+    cout << "Enter second moment(hours minutes seconds):" << endl;
+    cin >> hms[3]>> ch >> hms[4] >> ch >>  hms[5];
+
+    int v = abs((hms[0] - hms[3])*3600 + (hms[1] - hms[4])*60 +
+                        (hms[2] - hms[5]));
+
+    hms[0] = v/3600;
+    v %= 3600;
+    hms[1] = v/60;
+    v %= 60;
+    hms[2] = v;
+
+    cout << endl << hms[0] << ":";
+    cout << setw(2) << setfill('0') << hms[1]<<":";
+    cout << setw(2) << setfill('0') << hms[2];
+
+    return 0;
+}
+
+
+1.2
+
+#include <iostream>
+#include <math.h>
+
+using namespace std;
+
+double tg(double a)
+{
+    return sin(a)/cos(a);
+}
+
+int main()
+{
+    double a;
+    cout << "Enter a:\n";
+    cin >> a;
+
+    cout << "\nz1 = " << (1 - 2*sin(a)*sin(a))/(1 + sin(2*a));
+    cout << "\nz2 = " << (1 - tg(a))/(1 + tg(a));
+
+   return 0;
+}
+
+
+
+1.3
+
+#include <iostream>
+#include <math.h>
+
+using namespace std;
+
+int main()
+{
+    double a, b, c;
+    cout << "[ax^2 + bx + c = 0]\nEnter a, b, c:\n";
+    cin >> a >> b >> c;
+
+    int D = b*b - 4*a*c;
+
+    if (D == 0)
+    {
+        cout << "\nx = " << (-b/(2*a));
+    } else
+    if (D > 0)
+    {
+        cout << "\nx1 = " << ((-b+sqrt(D))/(2*a));
+        cout << "\nx2 = " << ((-b-sqrt(D))/(2*a));
+    }else
+    {
+        D *= -1;
+        cout << "\nx1 = " << (-b/(2*a)) << " + i*" << sqrt(D)/(2*a);
+        cout << "\nx2 = " << (-b/(2*a)) << " - i*" << sqrt(D)/(2*a);
+    }
+
+   return 0;
+}
+
+
+1.4
+
+#include <iostream>
+#include <math.h>
+
+using namespace std;
+
+double sqr(double a)
+{
+    return a*a;
+}
+
+int main()
+{
+    double x, y;
+    cout << "Enter coordinates of point:\n";
+    cin >> x >> y;
+
+    bool ok = false;
+
+    if ( (y >=  2*x+2) &&
+         (y <= -2*x+2) &&
+         (y >= 0)) ok = true;
+    else
+    if ( (sqr(x+1)+sqr(y) <= 1) &&
+         (sqr(x-1)+sqr(y) <= 1) &&
+         (y <= 0)) ok = true;
+
+    if (ok) cout << "Yes!";
+    else cout << "NO!";
+
+   return 0;
+}
+
+
+
+1.5
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main()
+{
+    string wd[7] = {"Monday", "Tuesday", "Wednesday", "Thursday",
+                "Friday", "Saturday", "Sunday"};
+
+    int n;
+    cout << "Enter number of week day:\n";
+    cin >> n;
+
+    if (n < 1 || n > 7) cout << "Error!";
+    else cout << wd[n-1];
+
+
+   return 0;
+}
+
+
+1.6
+
+#include <iostream>
+#include <math.h>
+#include <string>
+
+using namespace std;
+
+int main()
+{
+    string wd[7] = {"Monday", "Tuesday", "Wednesday", "Thursday",
+                "Friday", "Saturday", "Sunday"};
+
+    int y, m, d, c;
+    cout << "Enter date(yyyy mm dd):\n";
+    cin >> y >> m >> d;
+    c = y % 100;
+    y -= c*100;
+    m = (m > 2)?m-2:10+m;
+
+    int nd = (d + int(ceil(0.2*(13*m-1))) + y + int(ceil(y/4)) + int(ceil(c/4)) - 2*c + 777 ) % 7;
+
+    if (nd < 0 || nd > 6) cout << "Error!";
+    else cout << wd[nd];
+
+    return 0;
+}
+
+
+1.7
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main()
+{
+    int div[] = { 1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1 };
+    string name[] = { "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" };
+
+    int n, i = 0;
+    string res = "";
+
+    cout << "Enter number:\n";
+    cin >> n;
+
+    while (n > 0)
+    {
+        if (div[i] <= n)
+        {
+            n -= div[i];
+            res += name[i];
+        } else i++;
+    }
+
+    cout << "\n" << res;
+
+    return 0;
+}
+
+--------------------------------
+
+2.1
+
+#include <iostream>
+#include <string>
+#include <stdlib.h>
+
+using namespace std;
+
+void printArray(double *a, int lng, string captn = "")
+{
+    cout << endl << "[" << captn << "]\n";
+    for (int i = 0; i < lng; i++)
+        cout << a[i] << " ";
+    cout << endl;
+}
+
+int countSubsequence(double *a, int lng)
+{
+    if (lng < 2) return 0;
+
+    int k = (a[0] > a[1])?1:-1;
+    if (a[0] == a[1]) k = 0;
+    int res = 1;
+
+    for (int i = 1; i < lng-1; i++)
+    {
+        if (k*a[i] >= k*a[i+1])
+        {
+            if (k == 0)
+                k = (a[i] > a[i+1])?1:-1;
+        }
+        else
+        {
+            res += countSubsequence(a+1, lng-1);
+            break;
+        }
+    }
+
+    return res;
+}
+
+int main()
+{
+    double *p0, *p1, *p2;
+    int lp0, lp1, lp2;
+    double ap0, ap1, ap2;
+
+    cout << "Enter lengths 3 sequences:\n";
+    cin >> lp0 >> lp1 >> lp2;
+
+    p0 = new double[lp0];
+    p1 = new double[lp1];
+    p2 = new double[lp2];
+
+    ap0 = 0; ap1 = 0; ap2 = 0;
+
+    for (int i = 0; i < lp0; i++)
+    {
+        p0[i] = rand() % 24;
+        ap0 += p0[i];
+    }
+    ap0 /= lp0;
+
+    for (int i = 0; i < lp1; i++)
+    {
+        p1[i] = rand() % 10 + 50;
+        ap1 += p1[i];
+    }
+    ap1 /= lp1;
+
+    for (int i = 0; i < lp2; i++)
+    {
+        p2[i] = rand() % 15 - 7;
+        ap2 += p2[i];
+    }
+    ap2 /= lp2;
+
+    printArray(p0, lp0, "1 sequence");
+    cout << "Avrg = " << ap0 << endl;
+    cout << "Count SubSeq = " << countSubsequence(p0, lp0) << endl;
+    printArray(p1, lp1, "2 sequence");
+    cout << "Avrg = " << ap1 << endl;
+    cout << "Count SubSeq = " << countSubsequence(p1, lp1) << endl;
+    printArray(p2, lp2, "3 sequence");
+    cout << "Avrg = " << ap2 << endl;
+    cout << "Count SubSeq = " << countSubsequence(p2, lp2) << endl;
+
+    return 0;
+}
+
+
+2.2
+
+#include <iostream>
+#include <math.h>
+
+using namespace std;
+
+double sumSin(double x, int n)
+{
+    double sum = 0;
+
+    for (int i = 1; i < n; i++)
+    {
+        sum += sin(x);
+        x = sin(x);
+    }
+    return sum;
+}
+
+int main()
+{
+    int n;
+    double x;
+    cout << "Enter x and n:\n";
+    cin >> x >> n;
+
+    if (n < 1) cout << "Error";
+    else cout << "\n" << sumSin(x, n);
+
+    return 0;
+}
+
+
+2.3
+
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    double a, p, pi;
+    int k = 1;
+    
+    cout << "Enter abs value summand:";
+    cin >> a;
+
+    p = 1;
+    pi = 0;
+    
+    while (1./p > a)
+    {
+        pi += 1./p*k;
+
+        p += 2;
+        k *= -1;
+    }
+
+    pi *= 4;
+
+    cout << "\nPI = " << pi;
+
+    return 0;
+}
+
+
+2.4
+
+#include <iostream>
+#include <math.h>
+
+using namespace std;
+
+// тут вычисл€ем формулу дл€ одного х и точности е
+double sumSum(double x, double e) 
+{
+    double sum = 0;
+    double c = e + 1;
+    int i, k;
+    i = 0; k = 1;
+    sum = 0;
+
+    while (c > e)
+    {
+        c =  pow(x - 1, i + 1)/(i + 1);
+        sum += c*k;
+        k *= -1;
+
+        i++;
+    }
+
+    return sum;
+}
+
+int main()
+{
+    double x1, x2, e, dx;
+
+    cout << "Enter x1 and x2(0 < x <= 2):\n";
+    cin >> x1 >> x2;
+
+    if (x1 <= 0 || x2 <= 0 ||
+        x1 > 2 || x2 > 2)
+    {
+        cout << "Error!";
+        return 0;
+    }
+
+    cout << "Enter e and dx:\n";
+    cin >> e >> dx;
+
+    cout << "\n     [x] [sum]\n";
+
+    do
+    {
+        cout.width(8);
+        cout << x1 << " " << sumSum(x1, e) << endl;
+        x1+=dx;
+    } while (x1+dx < x2);
+
+    return 0;
+}
+
+
+2.5
+
+#include <iostream>
+#include <math.h>
+#include <iomanip>
+
+using namespace std;
+
+int main()
+{
+    int g, m;
+    double p, k, general_pay, your_pay;
+
+    cout << "Enter sum of credit(k), procent(p), term(g), per month(m):\n";
+    cin >> k >> p >> g >> m;// >> pay;
+    p /= 100;
+
+    general_pay =   k / (12 * g / m);
+
+    cout << "General Pay = " << general_pay << endl;
+
+    cout << "Enter your pay:\n";
+    cin >> your_pay;
+    if (your_pay < general_pay)
+        cout << "Sorry, your pay must be more than general pay!\n";
+    if (your_pay > k)
+        cout << "Sorry, your amount is too large!\n";
+
+
+    cout << "\n<GENERAL PAY>\n\n           [time] [pay]\n";
+
+    double sum = 0;
+    int i = 0;
+
+    while (sum < k)
+    {
+        cout << setw(18) << i+1 << " " << general_pay + (k-sum)*p << endl;
+        sum += general_pay;
+        i++;
+    }
+
+    if (your_pay > general_pay && your_pay < k)
+    {
+        cout << "\n<YOUR PAY>\n\n           [time] [pay]\n";
+
+        sum = 0;
+        i = 0;
+        double l = your_pay;
+
+        while (sum < k)
+        {
+            if (k - sum < your_pay) l = (k - sum);
+            cout << setw(18) << i+1 << " " << l + (k-sum)*p << endl;
+            sum += your_pay;
+            i++;
+        }
+    }
+
+
+    return 0;
+}
+
+
+2.6
+
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    const int N = 20;
+    int T[N];
+
+    cout << "Enter elements of massive(20):\n";
+    for (int i = 0; i < N; i++)
+    {
+        cout << i+1<< ": ";
+        cin >> T[i];
+    }
+
+    // 1.
+    /*
+    for (int i = N-1; i >= 0; i--)
+        cout << T[i] << " ";
+    */
+
+    // 2.
+    int c;
+    for (int i = 0; i < N/2; i++)
+    {
+        c = T[i];
+        T[i] = T[N-1-i];
+        T[N-1-i] = c;
+    }
+
+    for (int i = 0; i < N; i++)
+        cout << T[i] << " ";
+
+    return 0;
+}
+
+
+2.7
+
+#include <iostream>
+
+using namespace std;
+
+int iosif(int m, int n = 20)
+{
+    if (n == 1) return 1;
+    return 1+(iosif(m, n-1) + m-1)%n;
+}
+
+int main()
+{
+    const int N = 20;
+    int m, s1;
+    cout << "Enter m:\n";
+    cin >> m;
+
+    for (int i = 2; i < N; i ++)
+        if (iosif(i, N) == 1)
+        {
+            s1 = i;
+            break;
+        }
+
+    cout << "Saved: " << iosif(m, N) << "\nIf you want to saved 1st: " << s1 << endl;
+    return 0;
+}
+
+
+2.8
+
+#include <iostream>
+#include <limits>
+
+using namespace std;
+
+int main()
+{
+    int N;
+    double *a;
+    cout << "Enter length of massive:\n";
+    cin >> N;
+    cout << "\n";
+
+    if (N < 3)
+    {
+        cout << "Error";
+        return 0;
+    }
+
+    a = new double[N];
+
+    for (int i = 0; i < N; i++)
+    {
+        cout << i+1 << ": ";
+        cin >> a[i];
+    }
+
+    double _max, _sum_max = 0;
+    double _min, _sum_min = 0;
+    int k_mx, k_mn;
+
+    for (int j = 0; j < 3; j++)
+    {
+        _max = numeric_limits<double>::min();
+        for (int i = j; i < N; i++)
+        {
+            if (a[i]>=_max)
+            {
+                _max = a[i];
+                k_mx = i;
+            }
+        }
+
+        _sum_max += _max;
+        _max = a[k_mx];
+        a[k_mx] = a[j];
+        a[j] = _max;
+    }
+
+    for (int j = 0; j < 3; j++)
+    {
+        _min = numeric_limits<double>::max();
+        for (int i = j; i < N; i++)
+        {
+
+            if (a[i]<=_min)
+            {
+                _min = a[i];
+                k_mn = i;
+            }
+        }
+
+        _sum_min += _min;
+        _max = a[k_mn];
+        a[k_mn] = a[j];
+        a[j] = _min;
+    }
+
+
+    cout << "Sum min: " << _sum_min << endl;
+    cout << "Sum max: " << _sum_max << endl;
+
+    delete[] a;
+
+    return 0;
+}
+--------------------------------
+
+3.1
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main()
+{
+    string s;
+    bool ok = true;
+
+    cout << "Enter string:\n";
+    cin >> s;
+
+    for (int i = 0; i < s.length(); i++)
+    {
+        if (s[i] != '0' && s[i] != '1')
+        {
+            ok = false;
+            break;
+        }
+    }
+
+    if (ok) cout << "Yes";
+    else cout << "No";
+
+    return 0;
+}
+
+
+3.2
+
+#include <iostream>
+#include <math.h>
+
+using namespace std;
+
+char int10ToChar(int a)
+{
+    if (a < 10) a+=48;
+    else a = a + 55;
+    return a;
+}
+
+int charToInt10(char c)
+{
+    if (c >= 48 && c <= 57) return c - 48;
+    if (c >= 98 && c <= 122) return c - 32 - 55;
+    return c - 55;
+}
+
+int main()
+{
+    string num;
+    int i, num_int, old_ns, new_ns;
+
+    cout << "Enter number, old and new numeral system:\n";
+    cin >> num >> old_ns >> new_ns;
+    cout << endl;
+
+    num_int = 0;
+    for (int i = num.length()-1; i >= 0 ; i--)
+        num_int += charToInt10(num[i]) * pow(old_ns, num.length() - i - 1);
+
+    num = "";
+
+    while (num_int >= new_ns)
+    {
+        num += int10ToChar(num_int%new_ns);
+        num_int /= new_ns;
+        i++;
+    }
+    num += int10ToChar(num_int);
+
+    for (i = num.length()-1; i >= 0; i --)
+        cout << num[i];
+
+    return 0;
+}
+
+
+3.3
+
+#include <iostream>
+#include <string>
+#include <math.h>
+
+using namespace std;
+
+int length(char *c)
+{
+    int i = 0;
+    while(c[i] != '\0') i++;
+    return i;
+}
+
+int main()
+{
+    const int N = 255;
+    string abc[35] = {".-", "-...", "-.-.", "-..", ".", "..-.", "--.",
+                      "....", "..", ".---", "-.-", ".-..", "--", "-.",
+                      "---", ".--.", "--.-", ".-.", "...", "-", "..-",
+                      "...-", ".--", "-..-", "-.--", "--..", ".----", "..---",
+                      "...--", "....-", ".....", "-....", "--...", "---..", "----."};
+
+    char s[N];
+
+    cout << "Enter string:\n";
+    cin.getline(s, N);
+    cout << endl;
+
+    for (int i = 0; i < length(s); i ++)
+    {
+        if (s[i] >= 97 && s[i] <= 122)
+            s[i]-=32;
+
+        if (s[i] >= 65 && s[i] <= 90) cout << abc[s[i]-65];
+        else
+        {
+            if (s[i] >= 49 && s[i] <= 57) cout << abc[s[i]-49 + 26];
+            else
+            {
+                switch (s[i])
+                {
+                    case '0': cout << "-----"; break;
+                    case '.': cout << ".-.-.-"; break;
+                    case ',': cout << "--..--"; break;
+                    case ':': cout << "---..."; break;
+                    case '?': cout << "..--.."; break;
+                    case '-': cout << "-....-"; break;
+                    case '/': cout << "--..-."; break;
+                }
+            }
+        }
+
+         if (s[i] == 32) cout << "   ";
+    }
+
+    return 0;
+}
+
+
+3.4
+
+#include <iostream>
+
+using namespace std;
+
+int arabToInt(char c)
+{
+    int div[] = { 1000, 500, 100, 50, 10, 5, 1 };
+    char name[] = {'M', 'D', 'C', 'L', 'X', 'V', 'I'};
+
+    for (int i = 0; i < 7; i++)
+        if (c == name[i]) return div[i];
+
+    return 0;
+}
+
+string intToArab(int n)
+{
+    int div[] = { 1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1 };
+    string name[] = { "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" };
+
+    int i = 0;
+    string res = "";
+
+    while (n > 0)
+    {
+        if (div[i] <= n)
+        {
+            n -= div[i];
+            res += name[i];
+        } else i++;
+    }
+    return res;
+}
+
+void upChar(char *c, int l)
+{
+    for (int i = 0; i < l; i++)
+        if ( c[i] >= 'a' && c[i] <= 'z') c[i] = c[i] - ('a' - 'A');
+}
+
+int main()
+{
+    string num;
+    cout << "Enter number:\n";
+    cin >> num;
+
+    upChar(&num[0], num.length());
+
+    int sum = 0, i = 0, curnt, next;
+    while ((unsigned int)i < num.length())
+    {
+        curnt = arabToInt(num[i]);
+        if ((unsigned int)i < num.length()-1)
+        {
+            next = arabToInt(num[i+1]);
+            if (next > curnt)
+            {
+                curnt = next - curnt;
+                i++;
+            }
+        }
+        sum += curnt;
+        i++;
+    }
+
+    if (intToArab(sum) == num)
+        cout << endl << sum;
+    else
+        cout << "Incorrect number!";
+
+    return 0;
+}
+
+
+3.5
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main()
+{
+    string str;
+    cout << "Enter string:\n";
+    cin >> str;
+
+    int begin = 0, vb = 0;
+    int lngth = 0, vl = 0;
+    bool zero = false;
+
+    for (int i = 0; (unsigned int)i < str.length(); i ++)
+    {
+        if (str[i] == '0')
+        {
+            if (!zero)
+            {
+                vb = i; vl = 0;
+                zero = true;
+            } else vl ++;
+
+        } else
+        {
+            if (vl > lngth)
+            {
+                lngth = vl;
+                begin = vb;
+            }
+            zero = false;
+        }
+    }
+
+    if (vl > lngth)
+    {
+        lngth = vl;
+        begin = vb;
+    }
+
+    cout << "Begin: " << begin+1 << ", Length: " << lngth+1;
+
+    return 0;
+}
+
+3.6
+
+#include <iostream>
+
+using namespace std;
+
+bool symbol(char c)
+{
+    if (c >= 65 && c <= 90) return false;
+    if (c >= 97 && c <= 122) return false;
+    return true;
+}
+
+void upper(char *c)
+{
+    if (*c >= 65 && *c <= 90) *c += 32;
+    else
+    if (*c >= 97 && *c <= 122) *c -= 32;
+}
+
+int main()
+{
+    const int N = 85;
+
+    char str[N];
+    cout << "Enter string:\n";
+    cin.getline(str, N);
+
+    upper(&str[0]);
+
+    int i = 1;
+
+    while (str[i] != '\0')
+    {
+        if (symbol(str[i-1])) upper(&str[i]);
+        i++;
+    }
+
+    cout << str;
+
+    return 0;
+}
+
+
+3.7 
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+string getNum2(int k)
+{
+    string num = "0000";
+    int i = 3;
+
+    while (k >= 2)
+    {
+        num[i] = char(k%2 + 48);
+        k /= 2;
+        i--;
+    }
+    num[i] = char(k%2 + 48);
+
+    return num;
+}
+
+int main()
+{
+    string num, var_s;
+    int num_int;
+    cout << "Enter number:\n";
+    cin >> num_int;
+
+    num = "";
+    while (num_int > 0)
+    {
+        var_s = num;
+        num = getNum2(num_int%10) + var_s;
+        num_int /= 10;
+    }
+
+    cout << num;
+
+    return 0;
+}
+
+
+-------------------
+
+4.1
+
+#include <iostream>
+#include <string>
+#include <fstream>
+
+using namespace std;
+
+int main()
+{
+    string name = "test.txt";
+
+    cout << "Enter name of file:\n";
+    cin >> name;
+
+    fstream f(&name[0], ios_base::in);
+    if (!f.is_open())
+    {
+        cout << "Error reading";
+        return 1;
+    }
+
+    int i = 0, sum = 0, var;
+    while (!f.eof())
+    {
+        f >> var;
+        sum += var;
+        i++;
+    }
+
+    cout << endl << (float)sum/i;
+
+    f.close();
+    return 0;
+}
+
+4.2
+
+#include <iostream>
+#include <string>
+#include <fstream>
+
+using namespace std;
+
+int main()
+{
+    string n[10] = {"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
+    string name = "test.txt";
+
+    fstream f(&name[0], ios_base::in);
+    if (!f.is_open())
+    {
+        cout << "Error reading";
+        return 1;
+    }
+
+    string s, v;
+    s = "";
+    while (!f.eof())
+    {
+        getline(f, v);
+        if (s.length() == 0) s = v;
+        else s += '\n' + v;
+    }
+
+    for (unsigned int i = 0; i < s.length(); i++)
+    {
+        if (s[i] > 64 && s[i] < 91) cout << char(s[i] + 32);
+        else if (s[i] > 96 && s[i] < 123) cout << char(s[i] - 32);
+        else if (s[i] > 47 && s[i] < 58) cout << n[s[i]-48];
+        else cout << s[i];
+    }
+
+    f.close();
+    return 0;
+}
+
+4.3 
+
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <math.h>
+
+using namespace std;
+
+bool isNum(char c)
+{
+    if (c >= '0' && c <= '9')
+        return true;
+    return false;
+}
+
+bool check(string s)
+{
+    if (s[2] != '.') return false;
+    if (s[5] != '.') return false;
+    for (int i = 1; i < 10; i++)
+        if (!isNum(s[i]) && i != 2 && i != 5)
+            return false;
+
+    return true;
+
+}
+
+int strToInt(string s)
+{
+    int res = 0;
+    for (int i = s.length()-1; i >= 0 ; i--)
+    {
+        if (!isNum(s[i])) return 0;
+            res += int(s[i] - '0') * pow(10, s.length() - i - 1);
+    }
+    return res;
+}
+
+string getAge16(int n)
+{
+    int div[] = { 1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1 };
+    string name[] = { "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" };
+
+    int i = 0;
+    string res = "";
+
+    while (n > 0)
+    {
+        if (div[i] <= n)
+        {
+            n -= div[i];
+            res += name[i];
+        } else i++;
+    }
+
+    return res;
+}
+
+int main()
+{
+    string name = "test.txt";
+
+    fstream f(&name[0], ios_base::in);
+    if (!f.is_open())
+    {
+        cout << "Error reading";
+        return 1;
+    }
+
+    string s, v;
+    s = "";
+    while (!f.eof())
+    {
+        getline(f, v);
+        if (s.length() == 0) s = v;
+        else s += '\n' + v;
+    }
+    f.close();
+
+    string _s16;
+
+    for (unsigned int i = 0; i < s.length(); i++)
+    {
+        if (s[i] >= '0' && s[i] <= '9')
+        {
+            if (check(s.substr(i, 10)))
+            {
+                _s16 = getAge16(strToInt(s.substr(i+6, 4)));
+                s.erase(i+6, 4);
+                s.insert(i+6, _s16);
+                i+=10;
+            }
+        }
+    }
+
+    f.open(&name[0], ios_base::out);
+    f << s;
+    f.close();
+    return 0;
+}
+
+
+4.4
+
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <math.h>
+#include <vector>
+
+#define uint unsigned int
+
+using namespace std;
+
+vector<int> prefixFun(string s)
+{
+    vector<int> pfx;
+
+    int p = 0;
+    for (uint i = 1; i < s.length(); i++)
+    {
+        if (s[p] == s[i])
+            p++;
+        else p = 0;
+        pfx.push_back(p);
+    }
+    return pfx;
+}
+
+bool isSgn(char c)
+{
+    if (c >= 'a' && c <= 'z') return false;
+    if (c >= 'A' && c <= 'Z') return false;
+    if (c >= '0' && c <= '9') return false;
+    return true;
+}
+
+int KMP(string s0, string s1)
+{
+   vector<int> p = prefixFun(s1 + "$" + s0);
+   int l = s1.length();
+
+   for (uint i = 0; i < p.size(); i ++ )
+        if (l == p[i])
+        {
+            int k = i-2*l + 1;
+
+            bool word = true;
+            if (k > 0)
+                if (!isSgn(s0[k-1]))
+                    word  = false;
+
+            if (k+l < (int)s0.length() && word)
+                if (!isSgn(s0[k+1]))
+                    word  = false;
+
+            if (word) return k;
+        }
+   return -1;
+}
+
+int main()
+{
+    string name = "test.txt";
+
+    fstream f(&name[0], ios_base::in);
+    if (!f.is_open())
+    {
+        cout << "Error reading file";
+        return 1;
+    }
+
+    string sub;
+
+    cout << "Enter word:\n";
+    cin >> sub;
+
+    string s, v;
+    s = "";
+
+    cout << endl;
+    while (!f.eof())
+    {
+        getline(f, v);
+
+        if (KMP(v, sub) != -1) cout << v << endl;
+    }
+    f.close();
+    return 0;
+}
+
+
+4.5
+
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <math.h>
+#include <vector>
+
+#define uint unsigned int
+
+using namespace std;
+
+bool isSgn(char c)
+{
+    if (c >= 'a' && c <= 'z') return false;
+    if (c >= 'A' && c <= 'Z') return false;
+    if (c >= '0' && c <= '9') return false;
+    return true;
+}
+
+vector<int> prefixFun(string s)
+{
+    vector<int> pfx;
+
+    int p = 0;
+    for (uint i = 1; i < s.length(); i++)
+    {
+        if (s[p] == s[i])
+            p++;
+        else p = 0;
+        pfx.push_back(p);
+    }
+    return pfx;
+}
+
+int main()
+{
+    string name = "test.txt";
+
+    fstream f(&name[0], ios_base::in);
+    if (!f.is_open())
+    {
+        cout << "Error reading file";
+        return 1;
+    }
+
+    string sub;
+
+    cout << "Enter word:\n";
+    cin >> sub;
+
+    string s;
+    int k = 0;
+    int l = sub.length();
+
+    cout << endl;
+    getline(f, s);
+
+    vector<int> p = prefixFun(sub + "$" + s);
+    for (uint i = 0; i < p.size(); i++)
+        if (p[i] == l)
+        {
+            int m = i-2*l + 1;
+
+            bool word = true;
+            if (m > 0)
+                if (!isSgn(s[m-1]))
+                    word  = false;
+
+            if (m+l < (int)s.length() && word)
+                if (!isSgn(s[m+1]))
+                    word  = false;
+
+            if (word) k++;
+
+        }
+
+    cout << k;
+
+    f.close();
+    return 0;
+}
+
+
+
+4.6
+
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <math.h>
+#include <vector>
+
+#define uint unsigned int
+
+using namespace std;
+
+bool isSgn(char c)
+{
+    if (c == '_') return false;
+    if (c >= 'a' && c <= 'z') return false;
+    if (c >= 'A' && c <= 'Z') return false;
+    if (c >= '0' && c <= '9') return false;
+    return true;
+}
+
+vector<int> prefixFun(string s)
+{
+    vector<int> pfx;
+
+    int p = 0;
+    for (uint i = 1; i < s.length(); i++)
+    {
+        if (s[p] == s[i])
+            p++;
+        else p = 0;
+        pfx.push_back(p);
+    }
+    return pfx;
+}
+
+int main()
+{
+    string name = "test.txt";
+
+    fstream f(&name[0], ios_base::in);
+
+    if (!f.is_open())
+    {
+        cout << "Error reading";
+        return 1;
+    }
+
+    string str, s = "", maxStr = "";
+    string text = "";
+
+    while (!f.eof())
+    {
+        getline(f, str);
+        text += str;
+        for (uint i = 0; i < str.length(); i++)
+        {
+            if (!isSgn(str[i]) && (i+1 != str.length())) s += str[i];
+            else
+            {
+                if (i+1 == str.length()) s += str[i];
+                if (s.length() > maxStr.length()) maxStr = s;
+                s = "";
+            }
+        }
+    }
+
+    vector<int> p = prefixFun(maxStr + "$" + text);
+    int k = 0, l;
+    l = maxStr.length();
+    for (uint i = 0; i < p.size(); i++)
+        if (p[i] == l)
+        {
+            int m = i-2*l + 1;
+
+            bool word = true;
+            if (m > 0)
+                if (!isSgn(s[m-1]))
+                    word  = false;
+
+            if (m+l < (int)s.length() && word)
+                if (!isSgn(s[m+1]))
+                    word  = false;
+
+            if (word) k++;
+
+        }
+
+
+    cout << "Max Word: '" << maxStr << "' - " << k;
+
+    f.close();
+    return 0;
+}
+
+
+4.7
+
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <math.h>
+#include <vector>
+
+#define uint unsigned int
+
+using namespace std;
+
+bool isWord(char c)
+{
+    if (c == '_') return true;
+    if (c >= 'A' && c <= 'Z') return true;
+    if (c >= 'a' && c <= 'z') return true;
+    if (c >= '0' && c <= '9') return true;
+    if (c == 32) return true;
+
+    return false;
+}
+
+string delFirstSpace(string s)
+{
+    for (uint i = 0; i < s.length(); i++)
+    if (s[i]!=32)
+    {
+       return s.substr(i, s.length()-i);
+    }
+    return s;
+}
+
+int main()
+{
+    string name = "test.txt";
+
+    fstream f(&name[0], ios_base::in);
+    if (!f.is_open())
+    {
+        cout << "Error reading file";
+        return 1;
+    }
+
+    string text = "", s;
+
+    while (!f.eof())
+    {
+        getline(f, s);
+        text += s;
+    }
+
+    int b = 0;
+
+    for (uint i = 0; i < text.length(); i ++)
+    {
+        if (!isWord(text[i]))
+        {
+            if (text[i] == '?')
+            {
+                cout << delFirstSpace(text.substr(b+1, i-b)) << endl;
+                b = i;
+            } else b = i+1;
+        }
+    }
+
+    f.close();
+    return 0;
+}
+
+
+//4.8
+
+#include <iostream>
+#include <string>
+#include <fstream>
+
+#define uint unsigned int
+
+using namespace std;
+
+int deleteComments(string &s)
+{
+    if (s.length() < 2) return 0;
+
+
+    int k = 0;
+    bool b = false;
+    for (uint i = 0; i < s.length()-1; i++)
+    {
+        if (s[i] == '/')
+        {
+
+            if (s[i+1] == '/')
+            {
+                s.erase(i, s.length()-i);
+                return 0;
+            }
+            else if (s[i+1] == '*')
+                    {
+                        k = i;
+                        b = true;
+                    }
+        }
+        else
+        if (s[i] == '*' && s[i+1] == '/')
+        {
+            if ( k != 0)
+            {
+                s.erase(k, i-k+2);
+                k = 0;
+            } else k = i+2;
+        }
+    }
+
+    if (k != 0 && b) s.erase(k, s.length()-k);
+
+    return k;
+}
+
+int main()
+{
+    string name;
+
+    cout << "Enter name c-file:\n";
+    cin >> name;
+    fstream f(&name[0], ios_base::in);
+
+    cout << "Enter name output file:\n";
+    cin >> name;
+    fstream of(&name[0], ios_base::out);
+
+    if (!f.is_open())
+    {
+        cout << "Error reading";
+        return 1;
+    }
+
+    string s;
+    int k, old_k;
+    old_k = 0;
+    k = 0;
+    while (!f.eof())
+    {
+        getline(f, s);
+
+        k = deleteComments(s);
+        if (old_k != 0 && k == 0)
+            continue;
+
+        if (old_k != 0 && k != 0)
+        {
+            s.erase(0, k);
+            old_k = 0;
+            k = 0;
+        }
+        if (k != 0) old_k = k;
+
+        if (s.length() > 0)
+            of << s << endl;
+        s = "";
+    }
+
+
+    k = 0;
+
+    f.close();
+    of.close();
+    return 0;
+}
+
+4.9
+
+#include <iostream>
+#include <string>
+#include <fstream>
+
+#define uint unsigned int
+
+using namespace std;
+
+int main()
+{
+    string name = "test.txt";
+
+    fstream f(&name[0], ios_base::in);
+
+    if (!f.is_open())
+    {
+        cout << "Error reading";
+        return 1;
+    }
+
+    string str;
+
+    while (!f.eof())
+    {
+        getline(f, str);
+        for (uint i = 0; i < ((80-str.length())>>1); i++) cout << " ";
+        cout << str << endl;
+    }
+
+
+    f.close();
+    return 0;
+}
+
+
+4.10
+
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <math.h>
+#include <vector>
+
+#define uint unsigned int
+
+using namespace std;
+
+uint leftSpace(string s)
+{
+    for (uint i = 0; i < s.length(); i ++)
+        if (s[i] != 32)
+             return i;
+
+    return 0;
+}
+
+string createStr(string s, int ls, int ln)
+{
+    string res = "";
+    bool sp = false;
+    bool oneWord = true;
+
+    uint p = ls - leftSpace(s);
+    for (uint i = 0; i < p; i++)
+        s.insert(0, " ");
+
+    int countSpace = ln - s.length();
+    uint i = ls;
+    while (countSpace > 0)
+    {
+        if (s[i] == 32) oneWord = false;
+
+        if (s[i] == 32 && !sp)
+        {
+            s.insert(i, " ");
+            sp = true;
+            countSpace--;
+        }
+        else
+        {
+            if (s[i] != 32) sp = false;
+        }
+
+        i++;
+        if (i >= s.length())
+        {
+            i = ls;
+            if (oneWord) break;
+        }
+
+    }
+    return s;
+}
+
+int main()
+{
+    string name = "test.txt";
+
+    fstream f(&name[0], ios_base::in);
+
+    if (!f.is_open())
+    {
+        cout << "Error reading";
+        return 1;
+    }
+
+    vector<string> str;
+    string s;
+    uint maxLs = 0, maxLn = 0, k;
+    bool addML = false;
+
+    while (!f.eof())
+    {
+        getline(f, s);
+        k = leftSpace(s);
+
+        if (k > maxLs) maxLs = k;
+
+        k = s.length();
+        if (k > maxLn)
+        {
+           maxLn = k;
+           if (leftSpace(s) == maxLs) addML = false;
+           else addML = true;
+        }
+        str.push_back(s);
+    }
+
+    if (!addML) maxLn += maxLs;
+
+    for (uint i = 0; i < str.size(); i++)
+        cout << createStr(str[i], maxLs, maxLn) << endl;
+
+
+    f.close();
+    return 0;
+}
+
+
+4.11
+
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <conio.h>
+#include <cstdlib>
+
+#define uint unsigned int
+
+using namespace std;
+
+int main()
+{
+    string name;
+
+    cout << "Enter file name:\n";
+    cin >> name;
+    fstream f(&name[0], ios_base::in);
+
+    if (!f.is_open())
+    {
+        cout << "Error reading";
+        return 1;
+    }
+
+    string s;
+   // vector <string> str;
+
+    system("cls");
+    int i = 0;
+    bool ok = true;
+    while (ok)
+    {
+        while (i < 2)
+        {
+            if (f.eof())
+            {
+                ok = false;
+                cout << "<End of file.>";
+                break;
+            }
+            getline(f, s);
+            cout << s << endl;
+            i++;
+        }
+        getch();
+        i = 0;
+        system("cls");
+    }
+
+    f.close();
+    return 0;
+}
+
+4.12
+
+#include <iostream>
+#include <string>
+#include <fstream>
+
+#define uint unsigned int
+
+using namespace std;
+
+string getBkt(int k, bool close = false)
+{
+    switch(k%3)
+    {
+        case 1: return close?")":"(";
+        case 2: return close?"]":"[";
+        case 0: return close?"}":"{";
+    }
+    return "*";
+}
+
+int main()
+{
+    string name = "test.txt";
+
+    fstream f(&name[0], ios_base::in);
+
+    if (!f.is_open())
+    {
+        cout << "Error reading";
+        return 1;
+    }
+
+    string s;
+    getline(f, s);
+
+    int k_open = 0;
+    for (uint i = 0; i < s.length(); i++)
+    {
+        if (s[i] == '(')
+        {
+            k_open++;
+            s.erase(i,1);
+            s.insert(i, getBkt(k_open));
+        } else
+        if (s[i] == ')')
+        {
+            s.erase(i,1);
+            s.insert(i, getBkt(k_open, true));
+            k_open--;
+
+        }
+    }
+
+    if (k_open == 0) cout << s;
+    else cout << "Error! Incorrectly placed brackets!";
+
+    f.close();
+    return 0;
+}
+
+
+4.13 - cut
+
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <math.h>
+
+#define uint unsigned int
+
+using namespace std;
+
+bool isNum(char c)
+{
+    if (c >= '0' && c <= '9')
+        return true;
+    return false;
+}
+
+int strToInt(string s)
+{
+    int res = 0;
+    for (int i = s.length()-1; i >= 0 ; i--)
+    {
+        if (!isNum(s[i])) return 0;
+            res += int(s[i] - '0') * pow(10, s.length() - i - 1);
+    }
+    return res;
+}
+
+string intToStr(int i)
+{
+    string res = "";
+
+    while (i > 0)
+    {
+        res = char(i%10 + '0') + res;
+        i /= 10;
+    }
+
+    return res;
+}
+
+string addBeforeFormat(string s, string sub)
+{
+    uint i;
+    for (i = 0; i < s.length(); i++)
+        if (s[i] == '.') break;
+
+    s.insert(i, sub);
+    return s;
+}
+
+int main()
+{
+    string name;
+
+    cout << "Enter file name:\n";
+    cin >> name;
+    fstream f(&name[0], ios_base::in|ios_base::binary);
+
+    if (!f.is_open())
+    {
+        cout << "Error reading";
+        return 1;
+    }
+
+    string ns;
+    int n;
+    cout << "Enter n byte(or kb witk 'K'):\n";
+    cin >> ns;
+    if (ns[ns.length()-1] != 'K') n = strToInt(ns);
+    else
+    {
+        ns.erase(ns.length()-1, 1);
+        n = strToInt(ns)*1024;
+    }
+
+    char *data = new char[n];
+
+    fstream of;
+    string s;
+    int i = 1;
+
+    f.seekg(0, ios::end);
+    int size = f.tellg();
+    f.seekg(0, ios::beg);
+
+    int k, size_count = 0;
+
+    while (!f.eof())
+    {
+        if (size - size_count <= 0) break;
+        s = "_part_" + intToStr(i);
+        of.open(&addBeforeFormat(name, s)[0], ios_base::out|ios_base::binary);
+
+        k = min(n, size - size_count);
+        f.read(data, k);
+        of.write(data, k);
+        of.close();
+        i++;
+        size_count += n;
+    }
+
+
+    f.close();
+    delete[] data;
+    return 0;
+}
+
+ -/*-2 склейка-*/
+ 
+int main()
+{
+    string name;
+
+    cout << "Enter file name:\n";
+    cin >> name;
+    fstream f(&name[0], ios_base::out|ios_base::binary);
+
+    if (!f.is_open())
+    {
+        cout << "Error reading";
+        return 1;
+    }
+
+    fstream of;
+    string s;
+
+    int size;
+    int i = 1;
+
+    char *data;
+
+    while(1)
+    {
+        s = "_part_" + intToStr(i);
+        of.open(&addBeforeFormat(name, s)[0], ios_base::in|ios_base::binary);
+
+        if (!of.is_open()) break;
+
+        of.seekg(0, ios::end);
+        size = of.tellg();
+
+        of.seekg(0, ios::beg);
+
+        data = new char[size];
+        of.read(data, size);
+        of.close();
+
+        f.write(data, size);
+        i++;
+    }
+
+    f.close();
+
+    delete[] data;
+    return 0;
+}
+
+4.14
+
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <math.h>
+
+#define uint unsigned int
+
+using namespace std;
+
+string addBeforeFormat(string s, string sub)
+{
+    uint i;
+    for (i = 0; i < s.length(); i++)
+        if (s[i] == '.') break;
+
+    s.insert(i, sub);
+    return s;
+}
+
+char int10ToChar(int a)
+{
+    if (a < 10) a+=48;
+    else a = a + 55;
+    return a;
+}
+
+int charToInt10(char c)
+{
+    if (c >= 48 && c <= 57) return c - 48;
+    if (c >= 98 && c <= 122) return c - 32 - 55;
+    return c - 55;
+}
+
+string intToHex(int n)
+{
+    string num;
+    while (n >= 16)
+    {
+        num = int10ToChar(n%16) + num;
+        n /= 16;
+    }
+    num = int10ToChar(n) + num;
+    return num;
+}
+
+int main()
+{
+    string name;
+
+    cout << "Enter file name:\n";
+    cin >> name;
+    fstream f(&name[0], ios_base::in|ios_base::binary);
+
+    if (!f.is_open())
+    {
+        cout << "Error reading";
+        return 1;
+    }
+
+    fstream of(&addBeforeFormat(name, "_16")[0], ios_base::out);
+    
+    char c;
+    string s;
+    int k = 0, i = 0;
+
+    while (!f.eof())
+    {
+        // смещение
+        if (i == 0)
+        {
+            s  = intToHex(k) + ": ";
+            of.write(&s[0], s.length());
+        }
+
+        f.get(c);
+        s  = intToHex(c) + " ";
+        of.write(&s[0], s.length());
+        i++; k++;
+        if (i == 16)
+        {
+            of.put('\n');
+            i = 0;
+        }
+    }
+
+
+    f.close();
+
+    return 0;
+}
+
+
+4.15
+
+// кодировщик
+#include <iostream>
+#include <string>
+#include <fstream>
+
+#define uint unsigned int
+
+using namespace std;
+
+string toBase64(char* data, int lng = 3)
+{
+    string abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    string res = "";
+    int k;
+
+    if (lng <= 0) return "";
+
+    k = (data[0] & 0xFC) >> 2;
+    res += abc[k];
+
+    k = ((data[0] & 0x03) << 4)|((data[1] & 0xf0) >> 4);
+    res += abc[k];
+
+    if (lng < 2) return res + "==";
+    k = ((data[1] & 0x0f) << 2)|((data[2] & 0xc0) >> 6);
+    res += abc[k];
+
+    if (lng < 3) return res + "=";
+    k = data[2] & 0x3f;
+    res += abc[k];
+
+    return res;
+}
+
+int main()
+{
+    string name;
+
+    cout << "Enter input file name:\n";
+    cin >> name;
+    fstream f(&name[0], ios_base::in|ios_base::binary);
+
+    cout << "Enter output file name:\n";
+    cin >> name;
+    fstream of(&name[0], ios_base::out);
+
+    if (!f.is_open() || !of.is_open())
+    {
+        cout << "Error reading";
+        return 1;
+    }
+
+    char* data = new char[3];
+
+    f.seekg(0, ios::end);
+    int size = f.tellg();
+    f.seekg(0, ios::beg);
+
+    int k, count_size = 0;
+
+    while (!f.eof())
+    {
+        if (size - count_size <= 0) break;
+
+        k = min(3, size - count_size);
+        f.read(data, k);
+        count_size += 3;
+
+        if (k < 3)
+            for (int i = k; i < 3; i++) data[i] = 0;
+        of << toBase64(data, k);
+
+    }
+
+    delete[] data;
+    f.close();
+    of.close();
+
+    return 0;
+}
+
+// декодер
+
+#include <iostream>
+#include <string>
+#include <fstream>
+
+#define uint unsigned int
+
+using namespace std;
+
+int findBase64(char c)
+{
+    string abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    for (uint i = 0; i < abc.length(); i++)
+        if (abc[i] == c) return i;
+    return -1;
+}
+
+char* fromBase64(char* data, int* lng)
+{
+    int k[4];
+    char *res = new char[3];
+
+    for (int i = 0; i < 4; i++)
+        k[i] = findBase64(data[i]);
+    cout << k[0] << " " << k[1] << " " << k[2] << " " << k[3] << endl;
+    res[0] = char((k[0] << 2) + ((k[1] & 0x30) >> 4));
+    if (k[2] == -1)
+    {
+        *lng = 1;
+        return res;
+    }
+    res[1] = char(((k[1] & 0xf) << 4) + ((k[2] & 0x3c) >> 2));
+    if (k[3] == -1)
+    {
+        *lng = 2;
+        return res;
+    }
+    res[2] = char(((k[2] & 0x3) << 6) + k[3]);
+
+    *lng = 3;
+    return res;
+}
+
+int main()
+{
+    string name;
+
+    cout << "Enter input file name:\n";
+    cin >> name;
+    fstream f(&name[0], ios_base::in);
+
+    cout << "Enter output file name:\n";
+    cin >> name;
+    fstream of(&name[0], ios_base::out|ios_base::binary);
+
+    if (!f.is_open() || !of.is_open())
+    {
+        cout << "Error reading";
+        return 1;
+    }
+
+    char* data = new char[4];
+    char* data_out;
+
+    f.seekg(0, ios::end);
+    int size = f.tellg();
+    f.seekg(0, ios::beg);
+
+    int count_size = 0;
+    int l = 0;
+
+    while (!f.eof())
+    {
+        if (size - count_size <= 0) break;
+
+        f.read(data, 4);
+        count_size += 4;
+
+        data_out = fromBase64(data, &l);
+        of.write(data_out, l);
+
+    }
+
+    delete[] data;
+    f.close();
+    of.close();
+
+    return 0;
+}
+
+4.16
+
+
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <math.h>
+#include <vector>
+
+#define uint unsigned int
+
+using namespace std;
+
+string getNum2(uint64_t k)
+{
+    string num = "";
+    int i = 3;
+
+    while (k >= 2)
+    {
+        num = char(k%2 + 48)+num;
+        k /= 2;
+        i--;
+    }
+    num = char(k%2 + 48)+num;
+
+    return num;
+}
+
+bool getByte(uint64_t c, uint num)
+{
+    uint64_t f = 1;
+    c = c&(f << num);
+    return c!=0;
+}
+
+void setByte(uint64_t *p, int n)
+{
+    uint64_t f = 1;
+    *p = *p | (f << n);
+}
+
+int findInArrayNumber(int n)
+{
+    int a[64] =  { 58, 50, 42, 34, 26, 18, 10, 2,
+                   60, 52, 44, 36, 28, 20, 12, 4,
+                   62, 54, 46, 38, 30, 22, 14, 6,
+                   64, 56, 48, 40, 32, 24, 16, 8,
+                   57, 49, 41, 33, 25, 17,  9, 1,
+                   59, 51, 43, 35, 27, 19, 11, 3,
+                   61, 53, 45, 37, 29, 21, 13, 5,
+                   63, 55, 47, 39, 31, 23, 15, 7 };
+
+        for (int i = 0; i < 64; i++)
+            if (n == a[i]) return i;
+
+    return 0;
+}
+
+int findInArrayNumber2(int n)
+{
+    int a[64] =  {  40,  8,  48,  16,  56,  24,  64,  32,
+                    39,  7,  47,  15,  55,  23,  63,  31,
+                    38,  6,  46,  14,  54,  22,  62,  30,
+                    37,  5,  45,  13,  53,  21,  61,  29,
+                    36,  4,  44,  12,  52,  20,  60,  28,
+                    35,  3,  43,  11,  51,  19,  59,  27,
+                    34,  2,  42,  10,  50,  18,  58,  26,
+                    33,  1,  41,   9,  49,  17,  57,  25 };
+
+        for (int i = 0; i < 64; i++)
+            if (n == a[i]) return i;
+
+    return 0;
+}
+
+
+uint64_t getShake(uint64_t n)
+{
+    uint64_t res = 0;
+    for (int i = 0; i < 64; i++)
+        if (getByte(n, i))
+        {
+            //cout << n <<"  &: " << i << "  " << findInArrayNumber(i+1) << "\n";
+            setByte(&res, findInArrayNumber(i+1));
+        }
+
+    return res;
+}
+
+uint64_t getShakeDown(uint64_t n)
+{
+    uint64_t res = 0;
+    for (int i = 0; i < 64; i++)
+        if (getByte(n, i))
+        {
+            //cout << res <<"  #: " << i << "  " << findInArrayNumber2(i+1) << "\n";
+            setByte(&res, findInArrayNumber2(i+1));
+        }
+
+    return res;
+}
+
+
+
+int main()
+{
+    string name;
+
+    cout << "Enter input file name:\n";
+    cin >> name;
+    fstream f(&name[0], ios_base::in|ios_base::binary);
+
+    cout << "Enter output file name:\n";
+    cin >> name;
+    fstream of(&name[0], ios_base::out|ios_base::binary);
+
+    if (!f.is_open() || !of.is_open())
+    {
+        cout << "Error reading";
+        return 1;
+    }
+
+    char* data = new char[8];
+    long long *pres;
+
+    f.seekg(0, ios::end);
+    int size = f.tellg();
+    f.seekg(0, ios::beg);
+
+    int k, count_size = 0;
+
+    while (!f.eof())
+    {
+        if (size - count_size <= 0) break;
+
+        k = min(8, size-count_size);
+        f.read(data, k);
+        count_size += k;
+
+        if (k < 8)
+            for (int i = k-1; i > 0; i--)
+                data[8-k+i] = data[i];
+
+        pres = ((long long*)data);
+        *pres = getShake(*pres);
+        *pres = getShakeDown(*pres);
+
+        data = (char*)pres;
+
+        of.write(data, k);
+
+    }
+
+    delete[] data;
+    f.close();
+    of.close();
+
+    return 0;
+}
+
+
+
+4.17
+
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <vector>
+
+#define uint unsigned int
+
+using namespace std;
+
+string getTag(string s, int pos)
+{
+    bool firstSpace = true;
+    int beg, end;
+    for (uint i = pos; i < s.length(); i ++)
+    {
+        if (s[i] != 32)
+        {
+            if (firstSpace)
+            {
+                firstSpace = false;
+                beg = i-1;
+            } else
+            if (s[i] == '>')
+            {
+                end = i-1;
+                break;
+            }
+        } else
+        {
+            if (!firstSpace)
+            {
+                end = i-1;
+                break;
+            }
+        }
+    }
+
+   return s.substr(beg+1, end-beg);
+}
+
+bool allTags(string t, vector<string>* tags, bool del = false)
+{
+    if (!del)
+    {
+        tags->push_back(t);
+    } else
+    {
+        if (tags->size() <= 0)
+            return false;
+
+        if (tags->at(tags->size()-1) != t)
+            return false;
+
+        tags->pop_back();
+    }
+    return true;
+}
+
+bool rightTag(string s, vector<string>* tags)
+{
+    string vs;
+    for (uint i = 0; i < s.length()-1; i ++)
+    {
+        if (s[i] == '<')
+        {
+
+            if (s[i+1] == '/')
+            {
+                vs = getTag(s, i+2);
+                if (!allTags(vs, tags, true)) return false;
+            }
+            else
+            {
+                vs = getTag(s, i+1);
+                allTags(vs, tags);
+            }
+        }
+    }
+    return true;
+}
+
+int main()
+{
+    string name;
+
+    cout << "Enter file name:\n";
+    cin >> name;
+    fstream f(&name[0], ios_base::in);
+
+    if (!f.is_open())
+    {
+        cout << "Error reading";
+        return 1;
+    }
+
+    vector <string> tags;
+    string s;
+    bool flag = true;
+
+    while (!f.eof())
+    {
+        getline(f, s);
+        if (!rightTag(s, &tags))
+        {
+            cout << "Incorrect!";
+            flag = false;
+            break;;
+        }
+    }
+    if (flag) cout << "Correct!";
+
+    f.close();
+
+    return 0;
+}
+
+................................
+
+5.1
+
+#include <iostream>
+#include <stdlib.h>
+
+using namespace std;
+
+template <class T> void take(T *ar, int beg, int lng)
+{
+    T _min;
+    int indx = -1;
+    _min = ar[beg];
+    for (int i = beg + 1; i < lng; i++)
+    {
+        if (_min > ar[i])
+        {
+            _min = ar[i];
+            indx = i;
+        }
+    }
+    if (indx != -1)
+    {
+        T var = ar[beg];
+        ar[beg] = _min;
+        ar[indx] = var;
+    }
+
+}
+
+int main()
+{
+    const int N = 17;
+    int ar[N];
+
+    cout << " Our Array:\n";
+    for (int i = 0; i < N; i++)
+    {
+        ar[i] = rand()%10;
+        cout << ar[i] << "  ";
+    }
+
+    int i = 0;
+    while (i < N)
+    {
+        take(ar, i, N);
+        i++;
+    }
+
+    cout << "\n\n Sort Array:\n";
+    for (int i = 0; i < N; i++)
+        cout << ar[i] << "  ";
+
+    return 0;
+}
+
+
+
+5.2
+
+#include <iostream>
+#include <stdlib.h>
+
+using namespace std;
+
+template <class T> void take(T *ar, int beg, int lng)
+{
+    T _elm;
+    int k = beg - 1;
+    _elm = ar[beg];
+
+    while(ar[k] > _elm && k >= 0)
+    {
+        ar[k+1] = ar[k];
+        if (k == 0)
+        {
+            k--;
+            break;
+        }
+        k--;
+    }
+
+    ar[k+1] = _elm;
+}
+
+int main()
+{
+    const int N = 17;
+    int ar[N];
+
+    cout << " Our Array:\n";
+    for (int i = 0; i < N; i++)
+    {
+        ar[i] = rand()%10;
+        cout << ar[i] << "  ";
+    }
+
+    int i = 1;
+    while (i < N)
+    {
+        take(ar, i, N);
+        i++;
+    }
+
+    cout << "\n\n Sort Array:\n";
+    for (int i = 0; i < N; i++)
+        cout << ar[i] << "  ";
+
+    return 0;
+}
+
+5.3
+
+template <class T> void take(T *ar, int lng)
+{
+    int left, right, c;
+    int i = 2, k;
+    T Tmp;
+    do
+    {
+        left = 1;
+        right = i-1;
+        c = (left + right) / 2;
+        while (left != c)
+        {
+            if (ar[c-1] > ar[i-1])  right = c;
+            else left = c;
+            c = (left + right) / 2;
+        }
+
+        if (ar[left-1] < ar[i-1])
+        {
+            if (ar[i-1] > ar[right-1])
+               left = right + 1;
+               else left = right;
+        }
+
+        k = i;
+        Tmp = ar[i-1];
+        while (k>left)
+        {
+            ar[k-1] = ar[k-1-1];
+            k--;
+        }
+        ar[left-1] = Tmp;
+        i++;
+    } while (i <= lng);
+}
+
+int main()
+{
+    const int N = 17;
+    int ar[N];
+
+    cout << " Our Array:\n";
+    for (int i = 0; i < N; i++)
+    {
+        ar[i] = rand()%10;
+        cout << ar[i] << "  ";
+    }
+
+    take(ar, N);
+
+    cout << "\n\n Sort Array:\n";
+    for (int i = 0; i < N; i++)
+        cout << ar[i] << "  ";
+
+    return 0;
+}
+
+
+5.4
+
+#include <iostream>
+#include <stdlib.h>
+
+using namespace std;
+
+int increment(long inc[], long size)
+{
+  int p1, p2, p3, s;
+
+  p1 = p2 = p3 = 1;
+  s = -1;
+  do {
+    if (++s % 2)
+    {
+      inc[s] = 8 * p1 - 6 * p2 + 1;
+    } else
+    {
+      inc[s] = 9 * p1 - 9 * p3 + 1;
+      p2 *= 2;
+      p3 *= 2;
+    }
+	p1 *= 2;
+  } while(3*inc[s] < size);
+
+  return s > 0 ? --s : 0;
+}
+
+template<class T> void shellSort(T a[], long size)
+{
+  long inc, i, j, seq[40];
+  int s;
+
+  s = increment(seq, size);
+  while (s >= 0)
+  {
+	inc = seq[s--];
+
+    for (i = inc; i < size; i++) {
+      T temp = a[i];
+      for (j = i-inc; (j >= 0) && (a[j] > temp); j -= inc)
+        a[j+inc] = a[j];
+      a[j+inc] = temp;
+    }
+  }
+}
+
+
+int main()
+{
+    const int N = 17;
+    int ar[N];
+
+    cout << " Our Array:\n";
+    for (int i = 0; i < N; i++)
+    {
+        ar[i] = rand()%10;
+        cout << ar[i] << "  ";
+    }
+
+    shellSort(ar, N);
+
+    cout << "\n\n Sort Array:\n";
+    for (int i = 0; i < N; i++)
+        cout << ar[i] << "  ";
+
+    return 0;
+}
+
+
+5.5
+
+
+#include <iostream>
+#include <vector>
+#include <stdlib.h>
+
+#define uint unsigned int
+
+using namespace std;
+
+template <class T> vector<T> order (T *ar, int lng)
+{
+	vector<T> res;
+
+	for(int i = lng - 1; i > 0; i--)
+		if(ar[i] != ar[i-1])
+			    res.push_back(ar[i]);
+
+    if (lng > 1)
+    if (ar[0] != ar[1]) res.push_back(ar[0]);
+
+	return res;
+}
+
+int main()
+{
+    const int N = 17;
+    int a[N];
+
+    for (int i = 0; i < N; i++)
+    {
+        a[i] = rand()%10 + (N-i)*9;
+        cout << a[i] << " ";
+    }
+
+    vector <int> ordr = order(a, N);
+    cout << "\n\n";
+    for (uint i = 0; i < ordr.size(); i++)
+        cout << ordr[i] << " ";
+
+    return 0;
+}
+
+
+5.6
+
+#include <iostream>
+#include <vector>
+#include <stdlib.h>
+
+#define uint unsigned int
+
+using namespace std;
+
+int i_search(int *ar, int lng, int num)
+{
+    int lw = 0, hg = lng - 1, md;
+
+	if(num < ar[0] || num > ar[lng - 1])
+		return -1;
+
+    while(lw < hg)
+    {
+        if(num < ar[lw] || num > ar[hg])
+            return -1;
+
+        md = lw + (hg - lw) * (num - ar[lw]) / (ar[hg] - ar[lw]);
+        if(num < ar[md]) hg = md - 1;
+        else
+        if(num > ar[md]) lw = md + 1;
+        else return md;
+    }
+    if(ar[lw] != num) return -1;
+    return lw;
+}
+
+int main()
+{
+    const int N = 17;
+    int a[N];
+
+    for (int i = 0; i < N; i++)
+    {
+        a[i] = rand()%10 + i*9;
+        cout << a[i] << " ";
+    }
+
+    int k;
+    cout << "\n\nEnter number for search:\n";
+    cin >> k;
+
+    cout << "\n\nResult: " << i_search(a, N, k);
+
+    return 0;
+}
+
+
+5.7
+
+
+#include <iostream>
+#include <vector>
+#include <stdlib.h>
+
+#define uint unsigned int
+
+using namespace std;
+
+template <class T> bool cmp(vector<T> v, T el)
+{
+    for (uint i = 0; i < v.size(); i ++)
+        if (v[i] == el) return true;
+
+    return false;
+}
+
+int main()
+{
+    const int N = 17;
+    vector<int> vi, vo;
+
+    cout << " Our Array:\n";
+    for (int i = 0; i < N; i++)
+    {
+        //ar[i] = rand()%10;
+        vi.push_back(rand()%10);
+        cout << vi[i] << "  ";
+    }
+    for (uint i = 0; i < vi.size(); i++)
+    {
+        if (!cmp(vo, vi[i])) vo.push_back(vi[i]);
+    }
+
+    cout << "\nCount = " << vo.size();
+    return 0;
+}
+
+
+5.8
+
+#include <iostream>
+#include <vector>
+#include <stdlib.h>
+
+#define uint unsigned int
+
+using namespace std;
+
+vector<int> natur(int* ar,int n)
+{
+    int mx = 0;
+
+    vector<int> res;
+
+    for(int i = 0; i < n; i++)
+        mx = max(mx, ar[i]);
+
+    int *ms = new int[mx + 1];
+
+    for(int i = 0; i <= mx; i++)
+        ms[i] = 0;
+
+    for(int i = 0; i < n; i++)
+        ms[ar[i]]++;
+
+    for(int i =0; i <= mx; i++)
+        if(ms[i] == 0) res.push_back(i);
+
+    return res;
+ }
+
+
+int main()
+{
+    const int N = 17;
+    int a[N];
+
+    cout << " Our Array:\n";
+    int n;
+    for (int i = 0; i < N; i++)
+    {
+        n = rand()%10;
+        a[i] = n;
+        cout << a[i] << "  ";
+    }
+
+    cout << "\n";
+    vector<int> m = natur(a, N);
+    for (uint i = 0; i < m.size(); i++)
+        cout << m[i] << " ";
+
+    return 0;
+}
+
+
+
+5.9
+
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <vector>
+
+#define uint unsigned int
+
+using namespace std;
+
+uint min(uint x, uint y)
+{
+    return (x<y)?x:y;
+}
+
+bool sortMerger(vector<string> *str)
+{
+    vector <string> A, B;
+    bool writeA = true;
+
+    A.push_back(str->at(0));
+    for (uint i = 1; i < str->size(); i ++)
+    {
+        if (str->at(i) < str->at(i-1))
+            writeA = !writeA;
+
+        if (writeA) A.push_back(str->at(i));
+            else B.push_back(str->at(i));
+    }
+
+    if (B.size() == 0) return true;
+
+    str->clear();
+
+    int ib = min(1, A.size())-1, ia = min(1, B.size())-1;
+    while (ib != -1 || ia != -1)
+    {
+        if (ib == -1)
+        {
+            str->push_back(A[ia]);
+            ia = (ia < (int)A.size()-1)?ia+1:-1;
+        } else
+        if (ia == -1)
+        {
+            str->push_back(B[ib]);
+            ib = (ib < (int)B.size()-1)?ib+1:-1;
+        } else
+        {
+            if (A[ia] <= B[ib])
+            {
+                str->push_back(A[ia]);
+                ia = (ia < (int)A.size()-1)?ia+1:-1;
+            } else
+            {
+                str->push_back(B[ib]);
+                ib = (ib < (int)B.size()-1)?ib+1:-1;
+            }
+        }
+    }
+    return false;
+}
+
+int main()
+{
+    string name;
+
+    cout << "Enter file name:\n";
+    cin >> name;
+    fstream f(&name[0], ios_base::in);
+    fstream of("out.txt", ios_base::out);
+
+    if (!f.is_open())
+    {
+        cout << "Error reading";
+        return 1;
+    }
+
+    vector <string> str;
+    string s;
+
+    while (!f.eof())
+    {
+        getline(f, s);
+        str.push_back(s);
+    }
+    while (!sortMerger(&str));
+
+    for (uint i = 0; i < str.size(); i++)
+        of << str[i] + "\n";
+
+    f.close();
+    of.close();
+
+    return 0;
+}
