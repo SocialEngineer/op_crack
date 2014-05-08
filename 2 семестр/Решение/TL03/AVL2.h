@@ -1,9 +1,11 @@
 #pragma once
+#include <math.h>
+#include <vector>
 
-#include <iostream>
+#define uint unsigned int;
 
 template <typename K, typename V>
-class BST
+class AVL2
 {
 public:
 	typedef struct Node
@@ -23,17 +25,43 @@ public:
 		}
 	};
 
-	BST()
+	AVL2()
 	{
 		_root = 0;
 		_count = 0;
 	}
 
-	~BST(void) {}
+	~AVL2(void) {}
 
 	bool isEmpty()
 	{
 		return _root == 0;
+	}
+
+	bool balance( Node* nd )
+	{
+		int bf = height(nd->right) - height(nd->left);
+		if (abs(bf) == 2)
+		{
+			Node* child;
+			if (bf > 0) child = nd->right;
+			else child = nd->left;
+
+			int bf_c = height(child->right) - height(child->left);
+
+			if (bf > 0 && bf_c > 0) // left
+				child = leftRotation(child); else
+			if (bf < 0 && bf_c < 0) // right
+				child = rightRotation(child); else
+			if (bf > 0 && bf_c < 0) // right-left
+				child = leftRotation(rightRotation(child->left)); else
+			if (bf < 0 && bf_c > 0) // left-right
+				child = rightRotation(leftRotation(child->right));
+
+			return true;
+		}
+
+		return false;
 	}
 
 	void insert(K key, V value)
@@ -64,6 +92,13 @@ public:
 			if (nd->key > parent->key) parent->right = nd;
 			else parent->left = nd;
 			nd->parent = parent;
+
+			do // балансируем, если надо
+			{
+				if (balance(nd)) break;
+				nd = nd->parent;
+			} while (nd);
+
 		}
 		_count++;
 	}
@@ -78,7 +113,15 @@ public:
 	{
 		if (isEmpty()) return;
 
-		nodeRemove(find(key));
+		Node* d = nodeRemove(find(key));
+		Node* nd = d->parent;
+		delete d;
+
+		do // балансируем, если надо
+		{
+			if (balance(nd)) break;
+			nd = nd->parent;
+		} while (nd);
 	}
 
 	Node* root()
@@ -91,10 +134,77 @@ public:
 		traceNode(_root);
 		std::cout << std::endl;
 	}
+
+	void widthTrace()
+	{
+		std::vector<Node*> node;
+		int k = 0, t = 0;
+		node.push_back(_root);
+
+		while (k != node.size())
+		{
+			if (node[k]->left) 
+					node.push_back(node[k]->left);
+			if (node[k]->right) 
+					node.push_back(node[k]->right);
+			k++;
+
+			if ( t == floor(log(k)/log(2)) )
+			{
+				t++;
+				cout << endl;
+			}
+
+			cout << node[k-1]->key << "  ";
+		}
+		node.clear();
+	}
 	
 private:
 	Node* _root;
 	int _count;
+
+	Node* leftRotation(Node* p)
+	{
+		if (!p) return 0;
+		Node* pp = p->parent;
+
+		if (pp == _root) _root = p;
+
+		p->parent = pp->parent;
+		pp->parent = p;
+		if (p->parent)
+			if ( p->parent->key < p->key  ) p->parent->right = p;
+			else p->parent->left = p;
+		pp->right = p->left;
+		p->left = pp;
+
+		return p;
+	}
+
+	Node* rightRotation(Node* p)
+	{
+		if (!p) return 0;
+		Node* pp = p->parent;
+
+		if (pp == _root) _root = p;
+
+		p->parent = pp->parent;
+		pp->parent = p;
+		if (p->parent)
+			if ( p->parent->key < p->key  ) p->parent->right = p;
+			else p->parent->left = p;
+		pp->left = p->right;
+		p->right = pp;
+
+		return p;
+	}
+
+	int height(Node* p)
+	{
+		if (!p) return -1;
+		return max(height(p->left), height(p->right)) + 1;
+	}
 
 	Node* findOfRoot(K key, Node *beg)
 	{
@@ -122,9 +232,9 @@ private:
 		return leftMost(beg->left);
 	}
 
-	void nodeRemove(Node* nd)
+	Node* nodeRemove(Node* nd)
 	{
-		if (nd == 0) return;
+		if (nd == 0) return 0;
 
 		// нет детей
 		if (!nd->left && !nd->right)
@@ -132,9 +242,8 @@ private:
 
 			if (nd->parent->key < nd->key) nd->parent->right = 0;
 			else nd->parent->left = 0;
-
-			delete nd;
-			return;
+			
+			return nd;
 		}
 
 		// имеем левого ребенка
@@ -144,8 +253,7 @@ private:
 			else nd->parent->left = nd->left;
 
 			nd->left->parent = nd->parent;
-			delete nd;
-			return;
+			return nd;
 		}
 
 		// имеем правого ребенка
@@ -155,19 +263,16 @@ private:
 			else nd->parent->left = nd->right;
 
 			nd->right->parent = nd->parent;
-			delete nd;
-			return;
+			return nd;
 		}
 
 		// имеем всех двух детей
 		Node* rght = rightMost(nd->left);
 
-	//	cout << rght->key << " : " << endl;
-
 		nd->key = rght->key;
 		nd->value = rght->value;
 
-		nodeRemove(rght);
+		return nodeRemove(rght);
 	}
 
 	void traceNode(Node* p = 0, int level = 0)
@@ -181,4 +286,3 @@ private:
 		}
 	}
 };
-
