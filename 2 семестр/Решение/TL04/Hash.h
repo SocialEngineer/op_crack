@@ -21,7 +21,7 @@ HASH_INDEX stringToHash(string str)
 	h ^= (h >> 11);
 	h += (h << 15);
 
-    return h  % HASH_SIZE;
+    return h;
  } 
 
 template <typename T>
