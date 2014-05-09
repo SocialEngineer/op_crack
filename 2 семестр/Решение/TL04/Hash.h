@@ -21,24 +21,19 @@ HASH_INDEX stringToHash(string str)
 	h ^= (h >> 11);
 	h += (h << 15);
 
-    return h;
+    return h  % HASH_SIZE;
  } 
 
-template <typename T>
+template <typename K, typename V>
 class Hash
 {
-private:
-    List<T> *_array;
-    int _length;
-	int _hashSize;
-	HASH_INDEX (*_getHash)(T);
-
 public:
-    Hash(int hashSize, HASH_INDEX (*getHash)(T))
+
+    Hash(int hashSize, HASH_INDEX (*getHash)(K))
     {
         _length = 0;
-		_hashSize = hashSize;
-		_array = new List<T>[_hashSize];
+		_hashSize = max(hashSize, 2);
+		_array = new List<K, V>[_hashSize];
 		_getHash = getHash;
     }
 
@@ -50,29 +45,54 @@ public:
 		delete[] _array;
     }
 
-    bool add(T val)
+    bool add(K key, V val)
     {
-		if (_length == _hashSize) return false;
-
-         HASH_INDEX h = _getHash(val) % _hashSize;
-        _array[h].add(val);
+		//cout << key << " : "<< _getHash(key) << endl;
+         HASH_INDEX h = _getHash(key) % _hashSize;
+        _array[h].add(key, val);
 
         _length++;
 		return true;
     }
 
-    bool count(T val)
+    bool count(K key)
     {
-        return _array[_getHash(val)].length() != 0;
+        return _array[_getHash(key) % _hashSize].length() != 0;
     }
 
-	void remove(T val)
+	List<K, V>* getList(K key)
 	{
-		_array[_getHash(val)].remove(val);
+		return &_array[_getHash(key) % _hashSize];
+	}
+
+	V* find(K key)
+	{
+		V *val = getList(key)->find(key);
+		
+		return val;
+	}
+
+	void remove(K key)
+	{
+		_array[_getHash(key) % _hashSize].remove(key);
 	}
 
 	int length()
 	{
 		return _length;
 	}
+
+	void trace()
+	{
+		for (int i = 0; i < _length; i++)
+		{
+			if (_array[i].trace()) cout << endl;
+		}
+	}
+
+private:
+	List<K, V> *_array;
+    int _length;
+	int _hashSize;
+	HASH_INDEX (*_getHash)(K);
 };

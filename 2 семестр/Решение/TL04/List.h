@@ -1,6 +1,6 @@
 #pragma once
 
-template <typename T>
+template <typename K, typename V>
 class List
 {
 private:
@@ -8,12 +8,12 @@ private:
 	struct  Node
 	{
 	public:
-		T data;
+		K key;
+		V data;
 		Node* next;
 
 		Node()
 		{
-			//data = 0;
 			next = 0;
 		}
 	};
@@ -57,10 +57,11 @@ public:
 		return _head == 0;
 	}
 
-	void add(T val)
+	void add(K key, V val)
 	{
 		Node* var = new Node();
 		var->data = val;
+		var->key = key;
 
 		_length++;
 
@@ -73,17 +74,20 @@ public:
 		{
 			_tail->next = var;
 			_tail = var;
+			_tail->next = _head;
 		}
 	}
 
 	// есть ли
-	bool count(T val)
+	bool count(K key)
 	{
+		if (isEmpty()) return false;
+
 		Node *p = _head, *prev;
 
 		do
 		{
-			if (p->data == val)
+			if (p->key == key)
 				return true;
 			p = p->next;
 		} while(p != _head);
@@ -91,27 +95,31 @@ public:
 		return false;
 	}
 
-	T find(T val)
+	V* find(K key)
 	{
-		Node *p = _head;
+		if (isEmpty()) return 0;
+
+		Node *p = _head, *prev;
 
 		do
 		{
-			if (p->data == val)
-				return p->data;
+			if (p->key == key)
+				return &(p->data);
 			p = p->next;
 		} while(p != _head);
 
-		return false;
+		return 0;
 	}
 
-	void remove(T val)
+	void remove(K key)
 	{
+		if (isEmpty()) return;
+
 		Node *p = _head, *_old = _tail;
 
 		do
 		{
-			if (p->data == val)
+			if (p->key == key)
 			{
 				old->next = p->next;
 				delete p;
@@ -120,8 +128,21 @@ public:
 			_old = p;
 			p = p->next;
 		} while(p != _head);
+	}
 
-		return false;
+	bool trace()
+	{
+		Node *p = _head;
+
+		if (isEmpty()) return false;
+
+		do
+		{
+			cout << p->key << " : " << p->data << endl;
+			p = p->next;
+		} while(p != _head);
+
+		return true;
 	}
 	
 };
