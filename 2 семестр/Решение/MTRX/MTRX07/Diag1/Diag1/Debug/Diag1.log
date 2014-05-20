@@ -1,0 +1,38 @@
+﻿Build started 20.05.2014 6:06:38.
+     1>Project "C:\Users\Oleg\Desktop\ОП\2 семестр\Решение\MTRX\MTRX07\Diag1\Diag1\Diag1.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
+         main.cpp
+     1>c:\users\oleg\desktop\оп\2 семестр\решение\mtrx\mtrx07\diag1\diag1\main.cpp(18): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\oleg\desktop\оп\2 семестр\решение\mtrx\mtrx07\diag1\diag1\main.cpp(20): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\oleg\desktop\оп\2 семестр\решение\mtrx\mtrx07\diag1\diag1\main.cpp(34): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\oleg\desktop\оп\2 семестр\решение\mtrx\mtrx07\diag1\diag1\main.cpp(36): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\oleg\desktop\оп\2 семестр\решение\mtrx\mtrx07\diag1\diag1\main.cpp(57): warning C4018: '>=' : signed/unsigned mismatch
+     1>c:\users\oleg\desktop\оп\2 семестр\решение\mtrx\mtrx07\diag1\diag1\main.cpp(58): warning C4018: '>=' : signed/unsigned mismatch
+     1>c:\users\oleg\desktop\оп\2 семестр\решение\mtrx\mtrx07\diag1\diag1\main.cpp(74): warning C4018: '>=' : signed/unsigned mismatch
+     1>c:\users\oleg\desktop\оп\2 семестр\решение\mtrx\mtrx07\diag1\diag1\main.cpp(82): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\oleg\desktop\оп\2 семестр\решение\mtrx\mtrx07\diag1\diag1\main.cpp(84): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\oleg\desktop\оп\2 семестр\решение\mtrx\mtrx07\diag1\diag1\array2d.h(25): warning C4018: '<' : signed/unsigned mismatch
+                 c:\users\oleg\desktop\оп\2 семестр\решение\mtrx\mtrx07\diag1\diag1\array2d.h(19) : while compiling class template member function 'Array2d<T>::Array2d(unsigned int,unsigned int)'
+                 with
+                 [
+                     T=char
+                 ]
+                 c:\users\oleg\desktop\оп\2 семестр\решение\mtrx\mtrx07\diag1\diag1\main.cpp(105) : see reference to function template instantiation 'Array2d<T>::Array2d(unsigned int,unsigned int)' being compiled
+                 with
+                 [
+                     T=char
+                 ]
+                 c:\users\oleg\desktop\оп\2 семестр\решение\mtrx\mtrx07\diag1\diag1\main.cpp(16) : see reference to class template instantiation 'Array2d<T>' being compiled
+                 with
+                 [
+                     T=char
+                 ]
+       Link:
+         C:\Program Files\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Oleg\Desktop\ОП\2 семестр\Решение\MTRX\MTRX07\Diag1\Debug\Diag1.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Oleg\Desktop\ОП\2 семестр\Решение\MTRX\MTRX07\Diag1\Debug\Diag1.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Oleg\Desktop\ОП\2 семестр\Решение\MTRX\MTRX07\Diag1\Debug\Diag1.lib" /MACHINE:X86 Debug\main.obj
+         Diag1.vcxproj -> C:\Users\Oleg\Desktop\ОП\2 семестр\Решение\MTRX\MTRX07\Diag1\Debug\Diag1.exe
+     1>Done Building Project "C:\Users\Oleg\Desktop\ОП\2 семестр\Решение\MTRX\MTRX07\Diag1\Diag1\Diag1.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:01.94
